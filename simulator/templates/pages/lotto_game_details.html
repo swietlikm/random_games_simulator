@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container mt-3">
+    Lotto > <a class="no-text-decorations" href="{% url 'lotto:index' %}">Games</a> > {{ game }}
+    <table class="table table-bordered table-sm">
+      <thead>
+        <tr>
+          <th>Statistic</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Number of coupons</td>
+          <td>{{ total_coupons }}</td>
+        </tr>
+        <tr>
+          <td>Hit 6</td>
+          <td>{{ hit_6 }}</td>
+        </tr>
+        <tr>
+          <td>Hit 5</td>
+          <td>{{ hit_5 }}</td>
+        </tr>
+        <tr>
+          <td>Hit 4</td>
+          <td>{{ hit_4 }}</td>
+        </tr>
+        <tr>
+          <td>Hit 3</td>
+          <td>{{ hit_3 }}</td>
+        </tr>
+        <tr>
+          <td>Hit 2</td>
+          <td>{{ hit_2 }}</td>
+        </tr>
+        <tr>
+          <td>Hit 1</td>
+          <td>{{ hit_1 }}</td>
+        </tr>
+        <tr>
+          <td>Hit 0</td>
+          <td>{{ hit_0 }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-sm table-borderless mt-3">
+      <thead>
+        <tr>
+          <th>Game id</th>
+          <th>Numbers</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for numbers in user_numbers %}
+          <tr>
+            <td>{{ numbers.id }}</td>
+            <td>{{ numbers.numbers }}</td>
+            <td>{{ numbers.status }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="pagination justify-content-center">
+      <span class="step-links">
+        {% if user_numbers.has_previous %}
+          <a href="?page=1">« first</a>
+          <a href="?page={{ user_numbers.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">Page {{ user_numbers.number }} of {{ user_numbers.paginator.num_pages }}.</span>
+        {% if user_numbers.has_next %}
+          <a href="?page={{ user_numbers.next_page_number }}">next</a>
+          <a href="?page={{ user_numbers.paginator.num_pages }}">last »</a>
+        {% endif %}
+      </span>
+    </div>
+  </div>
+{% endblock content %}

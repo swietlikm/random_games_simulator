@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+  {% if text %}<h3 class="h3 my-3">{{ text }}</h3>{% endif %}
+  {% if coupons %}
+    <h5 class="h5 mt-3">
+      Coupons in game: {{ coupons }}
+    {% endif %}
+  </h5>
+  <form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit"
+           class="btn {% if btn_color %}{{ btn_color }}{% else %}btn-primary{% endif %}"
+           value="{% if btn_name %}{{ btn_name }}{% else %}Confirm{% endif %}" />
+  </form>
+{% endblock content %}

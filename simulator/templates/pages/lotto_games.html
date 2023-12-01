@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container mt-3">
+    <a href="{% url 'lotto:create' %}" class="btn btn-primary btn-lg mb-3">Add new game</a>
+    <h3>Open games:</h3>
+    <table class="table mb-5">
+      <thead>
+        <tr>
+          <th scope="col">Game</th>
+          <th scope="col">Your Coupons</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for game in open_games %}
+          <tr>
+            <td>
+              <a href="{% url 'lotto:details' pk=game.pk %}"
+                 class="link-primary link-offset-3 link-underline-opacity-25 link-underline-opacity-100-hover">
+                {{ game }}
+              </a>
+            </td>
+            <td>{{ game.user_coupons }}</td>
+            <td>
+              <a href="{% url 'lotto:random' pk=game.pk %}"
+                 class="btn btn-success btn-sm">Add Coupons</a>
+              <a href="{% url 'lotto:update' pk=game.pk %}"
+                 class="btn btn-warning btn-sm">Update</a>
+              <a href="{% url 'lotto:delete' pk=game.pk %}"
+                 class="btn btn-danger btn-sm">Delete</a>
+              <a href="{% url 'lotto:clear' pk=game.pk %}" class="btn btn-dark btn-sm">Remove coupons</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h3>Closed games:</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Game</th>
+          <th scope="col">Your Coupons</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for game in closed_games %}
+          <tr>
+            <td>
+              <a href="{% url 'lotto:details' pk=game.pk %}"
+                 class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                {{ game }}
+              </a>
+            </td>
+            <td>{{ game.user_coupons }}</td>
+            <td>
+              <a href="{% url 'lotto:random' pk=game.pk %}"
+                 class="btn btn-success btn-sm">Add Coupons</a>
+              <a href="{% url 'lotto:update' pk=game.pk %}"
+                 class="btn btn-warning btn-sm">Update</a>
+              <a href="{% url 'lotto:delete' pk=game.pk %}"
+                 class="btn btn-danger btn-sm">Delete</a>
+              <a href="{% url 'lotto:clear' pk=game.pk %}" class="btn btn-dark btn-sm">Remove coupons</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock content %}
