@@ -1,71 +1,89 @@
 {% extends "base.html" %}
 
+{% load humanize %}
+
 {% block content %}
   <div class="container mt-3">
-    <a href="{% url 'lotto:create' %}" class="btn btn-primary btn-lg mb-3">Add new game</a>
-    <h3>Open games:</h3>
-    <table class="table mb-5">
-      <thead>
-        <tr>
-          <th scope="col">Game</th>
-          <th scope="col">Your Coupons</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for game in open_games %}
-          <tr>
-            <td>
-              <a href="{% url 'lotto:details' pk=game.pk %}"
-                 class="link-primary link-offset-3 link-underline-opacity-25 link-underline-opacity-100-hover">
-                {{ game }}
-              </a>
-            </td>
-            <td>{{ game.user_coupons }}</td>
-            <td>
-              <a href="{% url 'lotto:random' pk=game.pk %}"
-                 class="btn btn-success btn-sm">Add Coupons</a>
-              <a href="{% url 'lotto:update' pk=game.pk %}"
-                 class="btn btn-warning btn-sm">Update</a>
-              <a href="{% url 'lotto:delete' pk=game.pk %}"
-                 class="btn btn-danger btn-sm">Delete</a>
-              <a href="{% url 'lotto:clear' pk=game.pk %}" class="btn btn-dark btn-sm">Remove coupons</a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <h3>Closed games:</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Game</th>
-          <th scope="col">Your Coupons</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for game in closed_games %}
-          <tr>
-            <td>
-              <a href="{% url 'lotto:details' pk=game.pk %}"
-                 class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
-                {{ game }}
-              </a>
-            </td>
-            <td>{{ game.user_coupons }}</td>
-            <td>
-              <a href="{% url 'lotto:random' pk=game.pk %}"
-                 class="btn btn-success btn-sm">Add Coupons</a>
-              <a href="{% url 'lotto:update' pk=game.pk %}"
-                 class="btn btn-warning btn-sm">Update</a>
-              <a href="{% url 'lotto:delete' pk=game.pk %}"
-                 class="btn btn-danger btn-sm">Delete</a>
-              <a href="{% url 'lotto:clear' pk=game.pk %}" class="btn btn-dark btn-sm">Remove coupons</a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <a href="{% url 'lotto:create' %}" class="btn btn-primary btn-lg mb-4">Add new game</a>
+    {% if open_games %}
+      <div class="container rounded shadow-sm">
+        <h4>Open games:</h4>
+        <table class="table mb-5 align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Game</th>
+              <th scope="col">Your Coupons</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            {% for game in open_games %}
+              <tr>
+                <td class="col col-lg-4">
+                  {% if game.task_progress %}
+                    <span class="text-primary">Work in progress ... {{ game.task_progress }}%</span>
+                  {% else %}
+                    <a href="{% url 'lotto:details' pk=game.pk %}"
+                       class="link-primary link-offset-3 link-underline link-underline-opacity-25 link-underline-opacity-100-hover">
+                      {{ game }}
+                    </a>
+                  {% endif %}
+                </td>
+                <td class="col col-lg-3">{{ game.user_coupons|intcomma }}</td>
+                <td>
+                  <a href="{% url 'lotto:generate-coupons' pk=game.pk %}"
+                     class="btn btn-success btn-sm">Add Coupons</a>
+                  <a href="{% url 'lotto:update' pk=game.pk %}"
+                     class="btn btn-warning btn-sm">Update/Evaluate</a>
+                  <a href="{% url 'lotto:delete' pk=game.pk %}"
+                     class="btn btn-danger btn-sm">Delete</a>
+                  <a href="{% url 'lotto:clear' pk=game.pk %}" class="btn btn-dark btn-sm">Remove coupons</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+    {% if closed_games %}
+      <div class="container rounded shadow-sm">
+        <h4>Closed games:</h4>
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Game</th>
+              <th scope="col">Your Coupons</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            {% for game in closed_games %}
+              <tr>
+                <td class="col col-lg-4">
+                  {% if game.task_progress %}
+                    <span class="text-success">Work in progress ... {{ game.task_progress }}%</span>
+                  {% else %}
+                    <a href="{% url 'lotto:details' pk=game.pk %}"
+                       class="link-secondary link-offset-3 link-underline link-underline-opacity-25 link-underline-opacity-100-hover">
+                      {{ game }}
+                    </a>
+                  {% endif %}
+                </td>
+                <td class="col col-lg-3">{{ game.user_coupons|intcomma }}</td>
+                <td>
+                  <a href="{% url 'lotto:generate-coupons' pk=game.pk %}"
+                     class="btn btn-success btn-sm">Add Coupons</a>
+                  <a href="{% url 'lotto:update' pk=game.pk %}"
+                     class="btn btn-warning btn-sm">Update/Evaluate</a>
+                  <a href="{% url 'lotto:delete' pk=game.pk %}"
+                     class="btn btn-danger btn-sm">Delete</a>
+                  <a href="{% url 'lotto:clear' pk=game.pk %}" class="btn btn-dark btn-sm">Remove coupons</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
   </div>
 {% endblock content %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <style>
+    .game-image {
+      width: 200px
+    }
+  </style>
+  <div class="container mt-5">
+    <div class="row mx-auto">
+      <!-- Game 1: Lotto -->
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="https://www.lotto.pl/cdn/f0adfd19562deeb4a89a1da2518a62fc.svg"
+               class="card-img-top game-image"
+               alt="Lotto Image" />
+          <div class="card-body">
+            <a href="{% url 'lotto:index' %}" class="btn btn-primary">Play Now</a>
+          </div>
+        </div>
+      </div>
+      <!-- Game 2: Eurojackpot -->
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="https://upload.wikimedia.org/wikipedia/en/a/a8/Eurojackpot_logo.png"
+               class="card-img-top game-image"
+               alt="Eurojackpot Image" />
+          <div class="card-body">
+            <a href="#" class="btn btn-primary disabled">Coming soon!</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

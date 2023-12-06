@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from .models import LottoGame, UserNumbers
+from .models import LottoCoupon, LottoGame
 
 admin.site.register(LottoGame)
 
 
-@admin.register(UserNumbers)
+@admin.register(LottoCoupon)
 class UserNumbersAdmin(admin.ModelAdmin):
     list_display = (
         "user",

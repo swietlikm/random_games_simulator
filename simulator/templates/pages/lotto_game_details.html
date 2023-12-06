@@ -1,80 +1,152 @@
 {% extends "base.html" %}
 
+{% load humanize %}
+
 {% block content %}
   <div class="container mt-3">
-    Lotto > <a class="no-text-decorations" href="{% url 'lotto:index' %}">Games</a> > {{ game }}
-    <table class="table table-bordered table-sm">
-      <thead>
-        <tr>
-          <th>Statistic</th>
-          <th>Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Number of coupons</td>
-          <td>{{ total_coupons }}</td>
-        </tr>
-        <tr>
-          <td>Hit 6</td>
-          <td>{{ hit_6 }}</td>
-        </tr>
-        <tr>
-          <td>Hit 5</td>
-          <td>{{ hit_5 }}</td>
-        </tr>
-        <tr>
-          <td>Hit 4</td>
-          <td>{{ hit_4 }}</td>
-        </tr>
-        <tr>
-          <td>Hit 3</td>
-          <td>{{ hit_3 }}</td>
-        </tr>
-        <tr>
-          <td>Hit 2</td>
-          <td>{{ hit_2 }}</td>
-        </tr>
-        <tr>
-          <td>Hit 1</td>
-          <td>{{ hit_1 }}</td>
-        </tr>
-        <tr>
-          <td>Hit 0</td>
-          <td>{{ hit_0 }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <table class="table table-sm table-borderless mt-3">
-      <thead>
-        <tr>
-          <th>Game id</th>
-          <th>Numbers</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for numbers in user_numbers %}
+    <p>
+      Lotto > <a class="no-text-decorations" href="{% url 'lotto:index' %}">Games</a> > {{ game }}
+    </p>
+    <div class="col col-lg-8 mx-auto">
+      <div class="card mb-4 shadow-sm bg-light">
+        <div class="card-body text-center">
+          <h5 class="card-title mb-3">Game Information</h5>
+          <p class="card-text">
+            Game Date: <span class="fw-bold">{{ game.date }}</span>
+          </p>
+          <p class="card-text">
+            Winning Numbers: <span class="text-primary fw-bold">{{ game.numbers }}</span>
+          </p>
+          <p class="card-text">
+            Game Status: <span class="fw-bold">{{ game.status }}</span> <a class="link-danger" href="{% url 'lotto:update' pk=game.pk %}">(Change)</a>
+          </p>
+          <p class="card-text">
+            Total Coupons: <span class="fw-bold">{{ total_coupons|intcomma }}</span> <a class="link-success"
+    href="{% url 'lotto:generate-coupons' pk=game.pk %}">(Add)</a>
+          </p>
+          <p class="card-text">
+            Chance of winning top prize: <span class="fw-bold">{{ chance }}%</span>
+          </p>
+        </div>
+      </div>
+      <div class="shadow-sm">
+        <table class="table table-bordered table-sm align-middle text-center my-3">
+          <thead>
+            <tr class="text-center">
+              <th class="col col-lg-3">Status</th>
+              <th class="col col-lg-3">Hits</th>
+              <th class="col col-lg-3">% of Hits</th>
+              <th class="col col-lg-3">Value [PLN]</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Hit 6</td>
+              <td>{{ hit_6 }}</td>
+              <td>{{ hit_6_prc }}</td>
+              <td>{{ hit_6_prize|intcomma }}</td>
+            </tr>
+            <tr>
+              <td>Hit 5</td>
+              <td>{{ hit_5|intcomma }}</td>
+              <td>{{ hit_5_prc }}</td>
+              <td>{{ hit_5_prize|intcomma }}</td>
+            </tr>
+            <tr>
+              <td>Hit 4</td>
+              <td>{{ hit_4|intcomma }}</td>
+              <td>{{ hit_4_prc }}</td>
+              <td>{{ hit_4_prize|intcomma }}</td>
+            </tr>
+            <tr>
+              <td>Hit 3</td>
+              <td>{{ hit_3|intcomma }}</td>
+              <td>{{ hit_3_prc }}</td>
+              <td>{{ hit_3_prize|intcomma }}</td>
+            </tr>
+            <tr>
+              <td>Hit 2</td>
+              <td>{{ hit_2|intcomma }}</td>
+              <td>{{ hit_2_prc }}</td>
+              <td>{{ hit_2_prize }}</td>
+            </tr>
+            <tr>
+              <td>Hit 1</td>
+              <td>{{ hit_1|intcomma }}</td>
+              <td>{{ hit_1_prc }}</td>
+              <td>{{ hit_1_prize }}</td>
+            </tr>
+            <tr>
+              <td>Hit 0</td>
+              <td>{{ hit_0|intcomma }}</td>
+              <td>{{ hit_0_prc }}</td>
+              <td>{{ hit_0_prize }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>Total</td>
+              <td></td>
+              <td></td>
+              <td>{{ total_prize|intcomma }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <table class="table table-sm table-borderless mt-3 text-center">
+        <thead>
           <tr>
-            <td>{{ numbers.id }}</td>
-            <td>{{ numbers.numbers }}</td>
-            <td>{{ numbers.status }}</td>
+            <th class="col col-lg-2">Coupon id</th>
+            <th class="col col-lg-4">Numbers</th>
+            <th class="col col-lg-2">Status</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <div class="pagination justify-content-center">
-      <span class="step-links">
-        {% if user_numbers.has_previous %}
-          <a href="?page=1">« first</a>
-          <a href="?page={{ user_numbers.previous_page_number }}">previous</a>
-        {% endif %}
-        <span class="current">Page {{ user_numbers.number }} of {{ user_numbers.paginator.num_pages }}.</span>
-        {% if user_numbers.has_next %}
-          <a href="?page={{ user_numbers.next_page_number }}">next</a>
-          <a href="?page={{ user_numbers.paginator.num_pages }}">last »</a>
-        {% endif %}
-      </span>
+        </thead>
+        <tbody>
+          {% for coupon in lotto_coupons %}
+            <tr>
+              <td>{{ coupon.id }}</td>
+              <td>{{ coupon.numbers }}</td>
+              <td>{{ coupon.status }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
+    {% if lotto_coupons.has_other_pages %}
+      <nav>
+        <ul class="pagination justify-content-center mt-3">
+          {% if lotto_coupons.has_previous %}
+            <li class="page-item">
+              <a class="page-link"
+                 href="?page={{ lotto_coupons.previous_page_number }}">Previous</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">Previous</span>
+            </li>
+          {% endif %}
+          {% for i in lotto_coupons.paginator.page_range %}
+            {% if lotto_coupons.number == i %}
+              <li class="page-item active">
+                <span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
+              </li>
+            {% else %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+          {% if lotto_coupons.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ lotto_coupons.next_page_number }}">Next</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">Next</span>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
   </div>
 {% endblock content %}
