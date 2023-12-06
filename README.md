@@ -34,4 +34,3 @@ Rename .env template into .env and add url to your postgress database
 
 ![image](https://github.com/swietlikm/random_games_simulator/assets/121583766/dd6244ea-ad16-4a6c-bedd-fa1488de0745)
 ![image](https://github.com/swietlikm/random_games_simulator/assets/121583766/74a5b519-0cb8-4801-a08c-6785282fda1e)
-
